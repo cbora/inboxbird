@@ -65,7 +65,7 @@ def track_open():
     return jsonify("{success: true}")
 
 
-@app.route('/create-open', methods=['GET', 'POST'])
+@app.route('/api/create-open', methods=['GET', 'POST'])
 @login_required
 def create_open():
     if request.method == 'POST':

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+
+{% block container %}
+<div class="content-page">
+    <!-- Start content -->
+    <div class="content">
+        <div class="container">
+
+            {% include "page-title.html" %}
+
+
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tbody>
+                                                {% for email in emails %}
+                                                <tr>
+                                                    <td>{% if email.number_opened > 0 %} V {% else %} - {% endif %}</td>
+                                                    <td>{{email.sent_date}}</td>
+                                                    <td>{{email.subject}}</td>
+                                                    <td>{{email.receiver}}</td>
+                                                    <td>{% if email.open_date %} {{email.open_date}} {% else %} - {% endif %}</td>
+                                                    <td><a href="{{url_for('archive_email', id=email.id)}}">archive</a></td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                            
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pls Remove -->
+            
+
+
+        </div> <!-- container -->
+        
+    </div> <!-- content -->
+
+    <footer class="footer text-right">
+        2018 InboxBird
+    </footer>
+
+</div>
+
+
+{% endblock %}

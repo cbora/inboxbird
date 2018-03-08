@@ -16,6 +16,9 @@ class User(UserMixin, db.Document):
     is_active = True  # BooleanField(required=True, default=True)
     role = db.StringField(default="User")
     is_admin = db.BooleanField(default=False)
+
+    timezone = db.StringField()
+    
     created_at = db.DateTimeField(default=dt.datetime.now)
 
     @property
