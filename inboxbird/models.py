@@ -17,6 +17,10 @@ class User(UserMixin, db.Document):
     role = db.StringField(default="User")
     is_admin = db.BooleanField(default=False)
 
+    social_id = db.IntField(default=1)
+    gg_token = db.StringField()
+    gg_id = db.StringField()
+
     timezone = db.StringField()
     
     created_at = db.DateTimeField(default=dt.datetime.now)

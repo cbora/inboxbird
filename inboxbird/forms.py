@@ -9,3 +9,6 @@ from werkzeug.utils import secure_filename
 import datetime
 
 from models import User
+
+class LoginForm(FlaskForm):
+    next_url = TextField(id='next_url')
