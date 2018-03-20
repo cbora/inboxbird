@@ -173,7 +173,7 @@ def create_open():
 def email_success(email_id):
 
     
-    text = '<img id="inboxbirdtracker" src="{}/track/open?id={}" width="1" height="1" border="0" style="position: absolute; left: 0; top: 0; width: 1px; height: 1px; opacity: 0.01;">'.format('localhost:5000', str(email_id))
+    text = '<img id="inboxbirdtracker" src="{}/track/open?id={}" width="1" height="1" border="0" style="position: absolute; left: 0; top: 0; width: 1px; height: 1px; opacity: 0.01;">'.format('https://www.inboxbird.com', str(email_id))
 
     user = User.objects(id=current_user.id).first()        
     return render_template('email-created.html',
