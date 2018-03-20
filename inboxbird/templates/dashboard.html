@@ -40,7 +40,13 @@
                                                     <td>{% if email.open_date %} {{email.get_open_date()}} {% else %} - {% endif %}</td>
                                                     <td>{{ email.number_opened }}</td>
                                                     <td><a href="{{url_for('email_success', email_id=email.id)}}">Show</a></td>
-                                                    <td><a href="{{url_for('start_tracking', eid=email.id)}}">Start Tracking</a></td>
+                                                    <td>
+                                                        {% if not email.start_tracking %}
+                                                        <a href="{{url_for('start_tracking', eid=email.id)}}">Start Tracking</a>
+                                                        {% else %}
+                                                        Tracking
+                                                        {% endif %}
+                                                    </td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>
