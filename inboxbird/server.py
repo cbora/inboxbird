@@ -121,11 +121,11 @@ def track_open():
     itemid = request.args.get('id', None)
     if itemid:
         opened = EmailOpen.objects(id=itemid).first()
-        if opened:
+        if opened and opened.start_tracking:
             if opened.number_opened > 2:
                 opened.number_opened += 1
                 opened.save()
-            elif opened.number_opened > 1:
+            elif opened.number_opened > 0:
                 opened.open_date_two = dt.datetime.now()
                 opened.number_opened += 1
                 opened.save()
@@ -136,6 +136,15 @@ def track_open():
     filename = 'static/emailopened.gif'
     return send_file(filename, mimetype='image/gif')
 
+
+
+@app.route('/start-tracking/<eid>')
+@login_required
+def start_tracking(eid):
+    email = EmailOpen.objects(id=eid).first()
+    email.start_tracking = True
+    email.save()
+    return redirect(url_for('dashboard'))
 
 
 @app.route('/get')

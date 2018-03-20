@@ -28,6 +28,7 @@
                                                 <th>Opened Date</th>
                                                 <th>Number of Opens</th>
                                                 <th>Show Link</th>
+                                                <th>Start Tracking</th>
                                             </tr>
                                             <tbody>
                                                 {% for email in emails %}
@@ -39,6 +40,7 @@
                                                     <td>{% if email.open_date %} {{email.get_open_date()}} {% else %} - {% endif %}</td>
                                                     <td>{{ email.number_opened }}</td>
                                                     <td><a href="{{url_for('email_success', email_id=email.id)}}">Show</a></td>
+                                                    <td><a href="{{url_for('start_tracking', eid=email.id)}}">Start Tracking</a></td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>

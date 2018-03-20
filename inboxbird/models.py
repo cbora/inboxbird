@@ -81,6 +81,8 @@ class EmailOpen(db.Document):
     sender_email = db.StringField()
     notes = db.StringField()
 
+    start_tracking = db.BooleanField(default=False)
+
     created_at = db.DateTimeField(default=dt.datetime.now)
 
     def get_sent_date(self):
