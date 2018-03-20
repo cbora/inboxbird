@@ -1,30 +1,40 @@
-from flask import Flask
-from flask_mongoengine import MongoEngine
-from flask_login import LoginManager
-import os
+from inboxbird import app
+
+from models import User, EmailOpen
+from flask_admin import BaseView, expose, AdminIndexView, Admin
+from flask_admin.contrib.mongoengine import ModelView
+
+from flask_admin.contrib.mongoengine import ModelView
+from flask import render_template
+from flask_admin.form import rules
+from werkzeug.security import generate_password_hash
+from wtforms import TextField, SelectField
+from flask.ext import login
+from flask_admin import BaseView, expose, AdminIndexView, Admin
 
 
-app = Flask(__name__)
-on_heroku = os.environ.get("ON_HEROKU", False)
+class AdminModelView(ModelView):
+    def is_accessible(self):
+        return login.current_user.is_administrator()
 
-if on_heroku:
-    app.config['MONGODB_SETTINGS'] = {
-
-    }
-else:
-    app.config['MONGODB_SETTINGS'] = {
-        
-    }
+    def inaccessible_callback(self, name, **kwargs):
+        return render_template('unauthorized.html')
 
 
-login_manager = LoginManager()
-login_manager.init_app(app)
+class QuickView(AdminModelView):
+    page_size = 50
 
 
-app.secret_key = "asdhesakljklfasagwh39thgawdadsdadas4"
-db = MongoEngine(app)
+class AnalyticsView(AdminIndexView):
+    @expose('/')
+    def admin_index(self):
+        if login.current_user.is_administrator():
+            analytics = 1
+            return self.render('admin/analytics.html', analytics=analytics)
+        else:
+            return self.render('unauthorized.html')
 
-import inboxbird.models
-import inboxbird.server
-if not on_heroku:
-    from inboxbird.admin import admin_app
+
+admin_app = Admin(app, index_view=AnalyticsView())
+admin_app.add_view(QuickView(User))
+admin_app.add_view(QuickView(EmailOpen))

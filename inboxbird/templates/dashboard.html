@@ -12,7 +12,7 @@
 
             <div class="row">
 
-                <div class="col-md-12">
+                <div class="col-md-9">
                     <div class="panel panel-default">
                         <div class="panel-body">
 
@@ -20,15 +20,25 @@
                                 <div class="col-xs-12">
                                     <div class="table-responsive">
                                         <table class="table">
+                                            <tr>
+                                                <th>Opened</th>
+                                                <th>Sent Date</th>
+                                                <th>Subject</th>
+                                                <th>Receiver</th>
+                                                <th>Opened Date</th>
+                                                <th>Number of Opens</th>
+                                                <th>Show Link</th>
+                                            </tr>
                                             <tbody>
                                                 {% for email in emails %}
-                                                <tr>
+                                                <tr {% if email.number_opened >= 0 %} style="background-color:#c7ffcf" {% endif %}>
                                                     <td>{% if email.number_opened > 0 %} V {% else %} - {% endif %}</td>
-                                                    <td>{{email.sent_date}}</td>
+                                                    <td>{{email.get_sent_date()}}</td>
                                                     <td>{{email.subject}}</td>
                                                     <td>{{email.receiver}}</td>
-                                                    <td>{% if email.open_date %} {{email.open_date}} {% else %} - {% endif %}</td>
-                                                    <td><a href="{{url_for('archive_email', id=email.id)}}">archive</a></td>
+                                                    <td>{% if email.open_date %} {{email.get_open_date()}} {% else %} - {% endif %}</td>
+                                                    <td>{{ email.number_opened }}</td>
+                                                    <td><a href="{{url_for('email_success', email_id=email.id)}}">Show</a></td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>
@@ -41,6 +51,11 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-md-3">
+                    <p><a href="{{url_for('new_email_form')}}">Add New Email</a></p>
+                </div>
+                
             </div>
 
             <!-- Pls Remove -->

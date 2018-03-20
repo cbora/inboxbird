@@ -1,0 +1,12 @@
+<div class="row">
+    <div class="col-sm-12">
+        <h4 class="pull-left page-title">{{page_title}}</h4>
+        <ol class="breadcrumb pull-right">
+            <li><a href="{{url_for('dashboard')}}">InboxBird</a></li>
+               {% if page_title_2 %}
+                <li><a href="{{url_for(page_title_2[0])}}">{{page_title_2[1]}}</a></li>
+                {% endif %}
+            <li class="active">{{page_title}}</li>
+        </ol>
+    </div>
+</div>

@@ -73,11 +73,21 @@ class EmailOpen(db.Document):
     recipient = db.StringField()
     message_blurb = db.StringField()
     gmail_msg_id = db.StringField()
-    open_date = db.DateTimeField()    
+    open_date = db.DateTimeField()
     open_date_two = db.DateTimeField()
     tmp_id = db.StringField()
     number_opened = db.IntField(default=0)
     author = db.ReferenceField(User)
     sender_email = db.StringField()
+    notes = db.StringField()
 
     created_at = db.DateTimeField(default=dt.datetime.now)
+
+    def get_sent_date(self):
+        return self.sent_date.strftime('%B %d, %I:%M %p')
+
+    def get_open_date(self):
+        return self.open_date.strftime('%B %d, %I:%M %p')
+
+    def get_open_date_two(self):
+        return self.open_date_two.strftime('%B %d, %I:%M %p')

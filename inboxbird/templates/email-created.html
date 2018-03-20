@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block container %}
+
+<div class="content-page">
+    <!-- Start content -->
+    <div class="content">
+        <div class="container">
+
+            {% include "page-title.html" %}
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-body">
+
+                            <p>Copy and paste this line below into your email</p>
+
+                            
+                            <p>&nbsp; {{ link }} &nbsp;</p>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

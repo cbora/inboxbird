@@ -1,47 +1,30 @@
-from inboxbird import app
-
-from models import User, EmailOpen
-from flask_admin import BaseView, expose, AdminIndexView, Admin
-from flask_admin.contrib.mongoengine import ModelView
-
-from flask_admin.contrib.mongoengine import ModelView
-from flask import render_template
-from flask_admin.form import rules
-from werkzeug.security import generate_password_hash
-from wtforms import TextField, SelectField
-from flask.ext import login
-from flask_admin import BaseView, expose, AdminIndexView, Admin
+from flask import Flask
+from flask_mongoengine import MongoEngine
+from flask_login import LoginManager
+import os
 
 
-class AdminModelView(ModelView):
-    def is_accessible(self):
-        return login.current_user.is_administrator()
+app = Flask(__name__)
+on_heroku = os.environ.get("ON_HEROKU", False)
 
-    def inaccessible_callback(self, name, **kwargs):
-        return render_template('unauthorized.html')
-
-
-class QuickView(AdminModelView):
-    page_size = 50
-
-
-class AnalyticsView(AdminIndexView):
-    @expose('/')
-    def admin_index(self):
-        if login.current_user.is_administrator():
-            analytics = 1
-            return self.render('admin/analytics.html', analytics=analytics)
-        else:
-            return self.render('unauthorized.html')
+if on_heroku:
+    app.config['MONGODB_SETTINGS'] = {
+        'host': 'mongodb://inboxbird:wallstreet12@ds119489.mlab.com:19489/inboxbird'
+    }
+else:
+    app.config['MONGODB_SETTINGS'] = {
+        'host': 'mongodb://inboxbird:wallstreet12@ds119489.mlab.com:19489/inboxbird'        
+    }
 
 
-admin_app = Admin(app, index_view=AnalyticsView())
-admin_app.add_view(QuickView(User))
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 
-class QuickView(ModelView):
-    page_size = 50
+app.secret_key = "asdhesakljklfasagwh39thgawdadsdadas4"
+db = MongoEngine(app)
 
-admin_app = Admin(app)
-admin_app.add_view(QuickView(User))
-admin_app.add_view(QuickView(EmailOpen))
+import inboxbird.models
+import inboxbird.server
+if not on_heroku:
+    from inboxbird.admin import admin_app
