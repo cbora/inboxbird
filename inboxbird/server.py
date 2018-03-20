@@ -105,7 +105,7 @@ def settings():
 @login_required
 def dashboard():
     user = User.objects(id=current_user.id).first()
-    opens = EmailOpen.objects(author=user).all()
+    opens = EmailOpen.objects(author=user).order_by('-sent_date').all()
     return render_template('dashboard.html',
                            emails=opens,
                            page_title='Dashboard',

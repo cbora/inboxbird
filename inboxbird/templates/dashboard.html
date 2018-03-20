@@ -32,7 +32,7 @@
                                             </tr>
                                             <tbody>
                                                 {% for email in emails %}
-                                                <tr {% if email.number_opened >= 0 %} style="background-color:#c7ffcf" {% endif %}>
+                                                <tr {% if email.number_opened > 0 %} style="background-color:#c7ffcf" {% endif %}>
                                                     <td>{% if email.number_opened > 0 %} V {% else %} - {% endif %}</td>
                                                     <td>{{email.get_sent_date()}}</td>
                                                     <td>{{email.subject}}</td>
