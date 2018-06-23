@@ -9,7 +9,8 @@ from flask import render_template
 from flask_admin.form import rules
 from werkzeug.security import generate_password_hash
 from wtforms import TextField, SelectField
-from flask.ext import login
+
+import flask_login
 from flask_admin import BaseView, expose, AdminIndexView, Admin
 
 
@@ -28,7 +29,7 @@ class QuickView(AdminModelView):
 class AnalyticsView(AdminIndexView):
     @expose('/')
     def admin_index(self):
-        if login.current_user.is_administrator():
+        if flask_login.current_user.is_administrator():
             analytics = 1
             return self.render('admin/analytics.html', analytics=analytics)
         else:

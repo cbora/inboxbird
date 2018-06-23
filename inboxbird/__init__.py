@@ -25,6 +25,7 @@ app.secret_key = "asdhesakljklfasagwh39thgawdadsdadas4"
 db = MongoEngine(app)
 
 import inboxbird.models
+import inboxbird.account
 import inboxbird.server
 if not on_heroku:
     from inboxbird.admin import admin_app

@@ -22,6 +22,9 @@ class User(UserMixin, db.Document):
     gg_id = db.StringField()
 
     timezone = db.StringField()
+    avatar = db.StringField()
+    locale = db.StringField()
+    gender = db.StringField()
     
     created_at = db.DateTimeField(default=dt.datetime.now)
 
