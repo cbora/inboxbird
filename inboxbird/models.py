@@ -84,6 +84,10 @@ class EmailOpen(db.Document):
     sender_email = db.StringField()
     notes = db.StringField()
 
+    msg_id = db.StringField()
+    draft_id = db.StringField()
+    thread_id = db.StringField()
+
     start_tracking = db.BooleanField(default=False)
 
     created_at = db.DateTimeField(default=dt.datetime.now)

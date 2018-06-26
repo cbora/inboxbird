@@ -62,12 +62,6 @@ def login2():
             return render_template('login.html', form=form, error=error, errors=['Wrong username or password'])
 
 
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('home'))
-
 
 @app.route('/')
 def home():

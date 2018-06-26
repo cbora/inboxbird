@@ -13,7 +13,7 @@ if on_heroku:
     }
 else:
     app.config['MONGODB_SETTINGS'] = {
-        'host': 'mongodb://inboxbird:wallstreet12@ds119489.mlab.com:19489/inboxbird'        
+        'host': 'mongodb://inboxbird:wallstreet12@ds119489.mlab.com:19489/inboxbird'    
     }
 
 
@@ -27,5 +27,9 @@ db = MongoEngine(app)
 import inboxbird.models
 import inboxbird.account
 import inboxbird.server
+import inboxbird.gmail_drafts
+import inboxbird.gmail_labels
+import inboxbird.gmail_messages
+import inboxbird.extension
 if not on_heroku:
     from inboxbird.admin import admin_app

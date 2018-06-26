@@ -22,7 +22,21 @@ oauth = OAuth()
 
 google = oauth.remote_app('google',
                           request_token_params={
-                              'scope': 'email'
+                              'scope':
+                              ['email',
+                               'profile',
+                               'https://mail.google.com/',
+                               'https://www.googleapis.com/auth/userinfo.email',
+                               'https://www.googleapis.com/auth/gmail.compose',
+                               'https://www.googleapis.com/auth/gmail.insert',
+                               'https://www.googleapis.com/auth/gmail.labels',
+                               'https://www.googleapis.com/auth/gmail.metadata',
+                               'https://www.googleapis.com/auth/gmail.modify',
+                               'https://www.googleapis.com/auth/gmail.readonly',
+                               'https://www.googleapis.com/auth/gmail.send',
+                               'https://www.googleapis.com/auth/gmail.settings.basic',
+                               'https://www.googleapis.com/auth/gmail.settings.sharing'
+                              ]
                           },
                           base_url='https://www.googleapis.com/oauth2/v1/',
                           request_token_url=None,
@@ -85,3 +99,11 @@ def gg_oauth_authorized(resp):
         #return redirect(url_for('edit_profile'))
         pass
     return redirect(next_url)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    session.pop('google_token')
+    logout_user()
+    return redirect(url_for('home'))
