@@ -16,27 +16,17 @@ import os
 
 GOOGLE_CLIENT_ID = '376292480667-4j297tue1elkr2utp2h6c17j7i4q92im.apps.googleusercontent.com'
 GOOGLE_CLIENT_SECRET = 'aZGQo7laQVJyPjuHM1BCIXHE'
+GOOGLE_SCOPE = ['email',
+                'profile',
+                'https://mail.google.com/',
+                'https://www.googleapis.com/auth/userinfo.email']
 
 oauth = OAuth()
 
 
 google = oauth.remote_app('google',
                           request_token_params={
-                              'scope':
-                              ['email',
-                               'profile',
-                               'https://mail.google.com/',
-                               'https://www.googleapis.com/auth/userinfo.email',
-                               'https://www.googleapis.com/auth/gmail.compose',
-                               'https://www.googleapis.com/auth/gmail.insert',
-                               'https://www.googleapis.com/auth/gmail.labels',
-                               'https://www.googleapis.com/auth/gmail.metadata',
-                               'https://www.googleapis.com/auth/gmail.modify',
-                               'https://www.googleapis.com/auth/gmail.readonly',
-                               'https://www.googleapis.com/auth/gmail.send',
-                               'https://www.googleapis.com/auth/gmail.settings.basic',
-                               'https://www.googleapis.com/auth/gmail.settings.sharing'
-                              ]
+                              'scope': GOOGLE_SCOPE
                           },
                           base_url='https://www.googleapis.com/oauth2/v1/',
                           request_token_url=None,
@@ -44,7 +34,9 @@ google = oauth.remote_app('google',
                           access_token_url='https://accounts.google.com/o/oauth2/token',
                           authorize_url='https://accounts.google.com/o/oauth2/auth',
                           consumer_key=GOOGLE_CLIENT_ID,
-                          consumer_secret=GOOGLE_CLIENT_SECRET)
+                          consumer_secret=GOOGLE_CLIENT_SECRET,
+                          access_token_params={'access_type': 'offline'})
+
 
 
 @login_manager.user_loader
@@ -76,6 +68,9 @@ def gg_oauth_authorized(resp):
     if resp is None:
         return redirect(next_url)
 
+    print("response")
+    print(resp)
+    #print(resp['t'])    
     session['google_token'] = (
         resp['access_token'],
         ''

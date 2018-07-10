@@ -9,6 +9,8 @@ from apiclient import errors
 
 from email.MIMEText import MIMEText
 import base64
+import dateutil.parser as parser
+from bs4 import BeautifulSoup
 
 import gmail_labels
 
@@ -105,6 +107,7 @@ def get_label_id(label_name):
     for l in labels:
         if l['name'] == label_name:
             return l['id']
+    return None
 
 
 @app.route('/label-id/<label_name>')
@@ -132,3 +135,76 @@ def get_inbox_message(msg_id):
 def read_message(msg_id):
     message = get_inbox_message(msg_id)
     return jsonify(message)
+
+
+@app.route('/frm-msg/<msg_id>')
+@login_required
+def get_msg_mtd(msg_id):
+    msg = get_message_metadata(msg_id)
+    return jsonify(msg)
+
+
+def get_message_metadata(msg_id):
+    """
+         # Get Formatted Messages
+    """
+    temp_dict = {}
+    message = get_inbox_message(msg_id)
+    payld = message['payload']  # get payload of the message
+    headr = payld['headers']  # get header of the payload
+
+    for one in headr:  # getting the Subject
+        if one['name'] == 'Subject':
+            msg_subject = one['value']
+            temp_dict['Subject'] = msg_subject
+        else:
+            pass
+
+    for two in headr:  # getting the date
+        if two['name'] == 'Date':
+            msg_date = two['value']
+            date_parse = (parser.parse(msg_date))
+            m_date = (date_parse)
+            temp_dict['Date'] = str(m_date)
+        else:
+            pass
+
+    for three in headr:  # getting the Sender
+        if three['name'] == 'From':
+            msg_from = three['value']
+            temp_dict['Sender'] = msg_from
+        else:
+            pass
+
+    for four in headr:
+        if four['name'] == 'To':
+            msg_to = four['value']
+            temp_dict['Recipient'] = msg_to
+
+    #fetching message message thread
+    temp_dict['ThreadID'] = message['threadId']
+    # fetching message snippet
+    temp_dict['Snippet'] = message['snippet']
+    temp_dict['InternalDate'] = message['internalDate']
+
+    try:
+        # Fetching message body
+        mssg_parts = payld['parts']  # fetching the message parts
+        part_one = mssg_parts[0]  # fetching first element of the part 
+        part_body = part_one['body']  # fetching body of the message
+        part_data = part_body['data']  # fetching data from the body
+        clean_one = part_data.replace("-", "+")  # decoding from Base64 to UTF-8
+        clean_one = clean_one.replace("_", "/")  # decoding from Base64 to UTF-8
+        clean_two = base64.b64decode(bytes(clean_one, 'UTF-8'))  # decoding from Base64 to UTF-8
+        soup = BeautifulSoup(clean_two, "lxml")
+        mssg_body = soup.body()
+        # mssg_body is a readible form of message body
+        # depending on the end user's requirements,
+        # it can be further cleaned
+        # using regex, beautiful soup, or any other method
+        temp_dict['Message_body'] = mssg_body
+    except:
+        print("failed to parse")
+
+    print (temp_dict)
+    return temp_dict

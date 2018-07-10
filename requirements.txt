@@ -34,3 +34,6 @@ WTForms-Components==0.10.3
 Flask-SSLify==0.1.5
 Flask-OAuth==0.12
 Flask-OAuthlib==0.9.4
+google-auth==1.5.0
+google-auth-httplib2==0.0.3
+google-auth-oauthlib==0.2.0

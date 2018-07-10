@@ -72,6 +72,7 @@ class AnonymousUser(AnonymousUserMixin):
 
 class EmailOpen(db.Document):
     sent_date = db.DateTimeField(default=dt.datetime.now)
+    system_sent_date = db.DateTimeField()
     subject = db.StringField()
     recipient = db.StringField()
     message_blurb = db.StringField()
@@ -87,6 +88,11 @@ class EmailOpen(db.Document):
     msg_id = db.StringField()
     draft_id = db.StringField()
     thread_id = db.StringField()
+
+    snippet = db.StringField()
+    gmail_internal_date = db.StringField()
+
+    sender_user_agent = db.StringField()
 
     start_tracking = db.BooleanField(default=False)
 
