@@ -15,10 +15,13 @@ from werkzeug.utils import secure_filename
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
+import gmail_messages
+
 login_manager.anonymous_user = AnonymousUser
 
 import os
 
+import base64
 
 
 
@@ -239,3 +242,15 @@ def edit_email_form():
                                    form=form,
                                    error=error, errors=errors,
                                    user=user)
+
+
+@app.route('/view-email/<emailid>')
+@login_required
+def view_email(emailid):
+
+    email = EmailOpen.objects(id=emailid).first()
+    msg_id = email.msg_id
+    msg = gmail_messages.get_inbox_message(msg_id)
+    b = msg['payload']['parts'][1]['body']['data']
+    msg_str = base64.urlsafe_b64decode(b.encode('UTF-8'))
+    return render_template('view-email.html', content=msg_str)

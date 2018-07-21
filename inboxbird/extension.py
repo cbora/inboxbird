@@ -98,6 +98,7 @@ def on_send():
     email.system_sent_date = dt.datetime.now()
     email.save()
 
+    session['email'] = email.author.email
     #label_id = gmail_messages.get_label_id(UNREAD_LABEL_NAME)
 
     #if not label_id:

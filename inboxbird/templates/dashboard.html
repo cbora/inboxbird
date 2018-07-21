@@ -29,6 +29,7 @@
                                                 <th>Number of Opens</th>
                                                 <th>Show Link</th>
                                                 <th>Start Tracking</th>
+                                                <th>View</th>
                                             </tr>
                                             <tbody>
                                                 {% for email in emails %}
@@ -36,7 +37,7 @@
                                                     <td>{% if email.number_opened > 0 %} V {% else %} - {% endif %}</td>
                                                     <td>{{email.get_sent_date()}}</td>
                                                     <td>{{email.subject}}</td>
-                                                    <td>{{email.receiver}}</td>
+                                                    <td>{{email.recipient}}</td>
                                                     <td>{% if email.open_date %} {{email.get_open_date()}} {% else %} - {% endif %}</td>
                                                     <td>{{ email.number_opened }}</td>
                                                     <td><a href="{{url_for('email_success', email_id=email.id)}}">Show</a></td>
@@ -47,6 +48,7 @@
                                                         Tracking
                                                         {% endif %}
                                                     </td>
+                                                    <td><a href="{{url_for('view_email', emailid=email.id)}}">View</a></td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>

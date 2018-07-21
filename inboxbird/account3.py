@@ -15,14 +15,19 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 import os
 
+import json
+
+import datetime as dt
+import requests
+
+from pprint import pprint
 
 
 GOOGLE_CLIENT_ID = '376292480667-4j297tue1elkr2utp2h6c17j7i4q92im.apps.googleusercontent.com'
 GOOGLE_CLIENT_SECRET = 'aZGQo7laQVJyPjuHM1BCIXHE'
-GOOGLE_SCOPE = ['email',
-                'profile',
-                'https://mail.google.com/',
-                'https://www.googleapis.com/auth/userinfo.email']
+GOOGLE_SCOPE = ['https://www.googleapis.com/auth/userinfo.profile',
+                'https://www.googleapis.com/auth/userinfo.email',
+                'https://mail.google.com/']
 
 GOOGLE_CONFIG = {"web":{"client_id":"376292480667-4j297tue1elkr2utp2h6c17j7i4q92im.apps.googleusercontent.com","project_id":"inboxbird","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://accounts.google.com/o/oauth2/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"aZGQo7laQVJyPjuHM1BCIXHE","redirect_uris":["http://localhost:5000/gg-oauth-authorized","http://inboxbird.com/gg-oauth-authorized"],"javascript_origins":["http://localhost:5000","http://inboxbird.com"]}}
 
@@ -80,14 +85,12 @@ def gg_oauth_authorized():
     # ACTION ITEM: In a production app, you likely want to save these
     #              credentials in a persistent database instead.
     credentials = flow.credentials
-    print('Print function : ', credentials_to_dict(credentials))
-
     mycredentials = google.oauth2.credentials.Credentials(
         **credentials_to_dict(credentials))
-    
     # Get User Profile Information
     profile = googleapiclient.discovery.build(
         'oauth2', 'v1', credentials=mycredentials)
+
 
     me = profile.userinfo().get().execute()
 
@@ -98,8 +101,6 @@ def gg_oauth_authorized():
         user.first_name = me['given_name']
         user.last_name = me['family_name']
         user.email = me['email']
-        user.gg_token = credentials.access_token
-        user.gg_refresh_token = credentials.refresh_token
         user.avatar = me['picture']
         user.locale = me['locale']
         user.password = generate_password_hash(os.urandom(10), method='pbkdf2:sha256', salt_length=8)
@@ -107,13 +108,17 @@ def gg_oauth_authorized():
         user.save()
     else:
         pass
+    user.gg_token = credentials_to_dict(mycredentials)
+    user.gg_token_last_updated = dt.datetime.now()
+    user.last_login = dt.datetime.now()
+    user.save()
 
     login_user(user)
 
 
     #files = drive.files().list().execute()
     #user_info = profile.
-    flask.session['credentials'] = credentials_to_dict(credentials)
+    flask.session['credentials'] = user.gg_token
 
     return flask.redirect(flask.url_for('dashboard'))
 
@@ -132,7 +137,8 @@ def credentials_to_dict(credentials):
 def logout():
     if 'credentials' in flask.session:
         del flask.session['credentials']
-    return ('Credentials have been cleared.<br><br>')
+    logout_user()
+    return flask.redirect(flask.url_for('home'))
 
 
 @app.route('/check')
@@ -147,4 +153,3 @@ def check():
 
     print("user info: ", userinfo)
     print('session: ', flask.session['credentials'])
-

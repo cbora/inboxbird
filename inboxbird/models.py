@@ -18,15 +18,17 @@ class User(UserMixin, db.Document):
     is_admin = db.BooleanField(default=False)
 
     social_id = db.IntField(default=1)
-    gg_token = db.StringField()
-    gg_refresh_token = db.StringField()
     gg_id = db.StringField()
+
+    gg_token = db.DictField()
+    gg_token_last_updated = db.DateTimeField()
 
     timezone = db.StringField()
     avatar = db.StringField()
     locale = db.StringField()
     gender = db.StringField()
-    
+
+    last_login = db.DateTimeField()
     created_at = db.DateTimeField(default=dt.datetime.now)
 
     @property
