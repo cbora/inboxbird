@@ -25,7 +25,7 @@ app.secret_key = "asdhesakljklfasagwh39thgawdadsdadas4"
 db = MongoEngine(app)
 
 import inboxbird.models
-import inboxbird.account
+import inboxbird.account3
 import inboxbird.server
 import inboxbird.gmail_drafts
 import inboxbird.gmail_labels

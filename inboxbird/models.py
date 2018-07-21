@@ -19,6 +19,7 @@ class User(UserMixin, db.Document):
 
     social_id = db.IntField(default=1)
     gg_token = db.StringField()
+    gg_refresh_token = db.StringField()
     gg_id = db.StringField()
 
     timezone = db.StringField()

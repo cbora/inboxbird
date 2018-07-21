@@ -26,7 +26,8 @@ oauth = OAuth()
 
 google = oauth.remote_app('google',
                           request_token_params={
-                              'scope': GOOGLE_SCOPE
+                              'scope': GOOGLE_SCOPE,
+                              'access_type': 'offline'
                           },
                           base_url='https://www.googleapis.com/oauth2/v1/',
                           request_token_url=None,
@@ -34,8 +35,8 @@ google = oauth.remote_app('google',
                           access_token_url='https://accounts.google.com/o/oauth2/token',
                           authorize_url='https://accounts.google.com/o/oauth2/auth',
                           consumer_key=GOOGLE_CLIENT_ID,
-                          consumer_secret=GOOGLE_CLIENT_SECRET,
-                          access_token_params={'access_type': 'offline'})
+                          consumer_secret=GOOGLE_CLIENT_SECRET
+                          )
 
 
 
@@ -69,11 +70,14 @@ def gg_oauth_authorized(resp):
         return redirect(next_url)
 
     print("response")
+    print(resp.keys())
+
+    print('\n\n\n')
     print(resp)
     #print(resp['t'])    
     session['google_token'] = (
         resp['access_token'],
-        ''
+        resp['refresh_token']
         )
     me = google.get('userinfo')
     user = User.objects(gg_id=me.data['id']).first()

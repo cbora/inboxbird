@@ -4,7 +4,7 @@ import httplib2
 from googleapiclient.discovery import build
 from oauth2client.client import AccessTokenCredentials
 import google.oauth2.credentials
-from inboxbird.account import GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_SCOPE
+from inboxbird.account3 import GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_SCOPE
 
 
 def get_service3():
