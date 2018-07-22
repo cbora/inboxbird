@@ -46,9 +46,9 @@ def get_service(user_email=None):
         user_email = session.get('email')
     else:
         return None
-    user = User.objects(email=user_email).first()    
+    user = User.objects(email=user_email).first()
     credentials = google.oauth2.credentials.Credentials(**user.gg_token)
-    user.gg_token = credentials_to_dict(credentials)
+    user.gg_token.update(credentials_to_dict(credentials))
     user.gg_token_last_updated = dt.datetime.now()
     user.save()
     service = build('gmail', 'v1', credentials=credentials)
@@ -56,12 +56,15 @@ def get_service(user_email=None):
 
 
 def credentials_to_dict(credentials):
-    return {'token': credentials.token,
-            'refresh_token': credentials.refresh_token,
-            'token_uri': credentials.token_uri,
-            'client_id': credentials.client_id,
-            'client_secret': credentials.client_secret,
-            'scopes': credentials.scopes}
+    d = {'token': credentials.token,
+         'token_uri': credentials.token_uri,
+         'client_id': credentials.client_id,
+         'client_secret': credentials.client_secret,
+         'scopes': credentials.scopes}
+
+    if credentials.refresh_token:
+        d['refresh_token'] = credentials.refresh_token
+    return d
 
 
 def get_user_id():

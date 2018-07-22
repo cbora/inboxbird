@@ -91,7 +91,6 @@ def gg_oauth_authorized():
     profile = googleapiclient.discovery.build(
         'oauth2', 'v1', credentials=mycredentials)
 
-
     me = profile.userinfo().get().execute()
 
     user = User.objects(gg_id=me['id']).first()
@@ -108,7 +107,7 @@ def gg_oauth_authorized():
         user.save()
     else:
         pass
-    user.gg_token = credentials_to_dict(mycredentials)
+    user.gg_token.update(credentials_to_dict(mycredentials))
     user.gg_token_last_updated = dt.datetime.now()
     user.last_login = dt.datetime.now()
     user.save()
@@ -124,13 +123,15 @@ def gg_oauth_authorized():
 
 
 def credentials_to_dict(credentials):
-    return {'token': credentials.token,
-            'refresh_token': credentials.refresh_token,
-            'token_uri': credentials.token_uri,
-            'client_id': credentials.client_id,
-            'client_secret': credentials.client_secret,
-            'scopes': credentials.scopes}
+    d = {'token': credentials.token,
+         'token_uri': credentials.token_uri,
+         'client_id': credentials.client_id,
+         'client_secret': credentials.client_secret,
+         'scopes': credentials.scopes}
 
+    if credentials.refresh_token:
+        d['refresh_token'] = credentials.refresh_token
+    return d
 
 @app.route('/logout')
 @login_required
