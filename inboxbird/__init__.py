@@ -4,7 +4,11 @@ from flask_login import LoginManager
 import os
 
 
-app = Flask(__name__)
+from application import application
+
+app = application
+
+
 on_heroku = os.environ.get("ON_HEROKU", False)
 
 if on_heroku:
