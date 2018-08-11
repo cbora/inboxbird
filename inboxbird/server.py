@@ -70,11 +70,11 @@ def login2():
 def home():
     if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
-    return render_template('home.html')
+    return render_template('index.html')
 
 @app.route('/')
 def index():
-    return render_template('home.html')
+    return render_template('index.html')
 
 @app.route('/about')
 def about():

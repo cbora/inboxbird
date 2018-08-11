@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>InboxBird</title>
+    <meta charSet="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Mail Tracking for Gmail">
+    <meta property="og:image" content="">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/color.css')}}">
+
+
+
+    <style>
+    </style>
+  </head>
+
+  <body class="font-friendly">
+    <div class="blue-white">
+      <header class="header">
+        <div class="container-lrg">
+          <div class="flex col-12 spread">
+            <a href="/" class="logo primary-color logo">InboxBird</a>
+            <a href="#main-menu" id="menu" class="menu-toggle">
+              <b class="nav-link mr0 secondary-color">☰</b>
+            </a>
+            <nav id="main-menu" role="navigation" class="main-menu">
+              <a href="#" id="main-menu-close" class="menu-close">
+                <span class="bold">✕</span>
+              </a>
+              <a href="{{url_for('login')}}" class="nav-link secondary-color">Login</a>
+              <a href="{{url_for('login')}}" class="nav-link secondary-color">Sign Up</a>
+            </nav>
+          </div>
+        </div>
+      </header>
+      <section class="section">
+        <div class="container mb40">
+          <div class="col-12 text-center">
+            <h1 class="heading-lrg primary-color">Mail Tracking for Gmail</h1>
+            <h2 class="subheading secondary-color mt20">Track when users open your email. </h2>
+            <div class="mt40">
+              <a href="{{url_for('login')}}" class="button mobile-text-center mt10 mobile-text-center accent-bg primary-color">
+                <span> Get Started Now </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <footer id="footer-1" class="section text-center blue-white" sitemeta="[object Object]" activepage="Landing">
+      <div class="container col-12">
+        <div>
+          <a href="mailto:info@inboxbird.com" class="socialicons accent-bg email"></a>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+
+</html>
